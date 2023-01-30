@@ -34,9 +34,41 @@ We examined three models: a support vector machine, a bidirectional long short-t
 
 ### Support Vector Machine
 
-This traditional model we used as our baseline model. We used Stanford's GloVe word embeddings to create a list of 200-dimensional embeddings for each word in the dataset. We tuned the model using cross_validation and 
+This traditional model we used as our baseline model. We used Stanford's GloVe word embeddings to create a list of 200-dimensional embeddings for each word in the dataset. To address class imbalance, we over-sampled in our training dataset from minority classes. We tuned the model using cross_validation and 12 hyperparemeter combinations:
+| Inv. Regularization Strength (C) | Kernel | Gamma | F1    |
+|----------------------------------|--------|-------|-------|
+| 1                                | Linear | NA    | 0.597 |
+| 10                               | Linear | NA    | 0.605 |
+| 100                              | Linear | NA    | 0.608 |
+| 1000                             | Linear | NA    | 0.610 |
+| 1                                | RBF    | .001  | 0.192 |
+| 1                                | RBF    | .0001 | 0.081 |
+| 10                               | RBF    | .001  | 0.431 |
+| 10                               | RBF    | .0001 | 0.192 |
+| 100                              | RBF    | .001  | 0.578 |
+| 100                              | RBF    | .0001 | 0.432 |
+| 1000                             | RBF    | .001  | 0.601 |
+| 1000                             | RBF    | .0001 | 0.578 |
+
+The highest performing model achieving a macro-averaged F1 score of 0.610.
 
 ### Bi-LSTM Network
+
+We used the same GloVe embeddings as before, but instead of using oversampling to address the class imbalance, we used a weighted cross-entropy to prioritize under-represented classes. The model consisted of an embedding layer, a bi-directional bi-LSTM with 2 layers each with 512 hidden units per direction, and a 2-layer fully-connected network ****insert image here****
+
+We used our validation set to optimize 8 sets of hyperparameters:
+| Epochs | Learning Rate | LSTM Layers | Dropout | F1   |
+|--------|---------------|-------------|---------|------|
+| 5      | .001          | 2           | .1      | .717 |
+| 5      | .001          | 2           | .2      | .721 |
+| 14     | .0001         | 2           | .3      | .708 |
+| 7      | .0001         | 3           | .3      | .705 |
+| 10     | .01           | 3           | .2      | .695 |
+| 11     | .001          | 3           | .3      | .689 |
+| 9      | .001          | 3           | .4      | .700 |
+| 8      | .001          | 3           | .5      | .699 |
+
+All models were trained for 25 epochs but the reported score is for the best-performing epoch.
 
 ### BERT Transformers
 
