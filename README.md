@@ -1,4 +1,4 @@
-# Emotion-Classification
+# Emotion Detection
 
 For a more in depth look at the project you can look at the [report](https://github.com/xaviergenelin/Emotion-Classification/blob/main/FinalProject_Report.pdf) that we wrote.
 
