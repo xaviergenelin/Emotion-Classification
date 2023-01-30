@@ -54,9 +54,12 @@ The highest performing model achieving a macro-averaged F1 score of 0.610.
 
 ### Bi-LSTM Network
 
-We used the same GloVe embeddings as before, but instead of using oversampling to address the class imbalance, we used a weighted cross-entropy to prioritize under-represented classes. The model consisted of an embedding layer, a bi-directional bi-LSTM with 2 layers each with 512 hidden units per direction, and a 2-layer fully-connected network ****insert image here****
+We used the same GloVe embeddings as before, but instead of using oversampling to address the class imbalance, we used a weighted cross-entropy to prioritize under-represented classes. The model consisted of an embedding layer, a bi-directional bi-LSTM with 2 layers each with 512 hidden units per direction, and a 2-layer fully-connected network:
+
+![](https://github.com/xaviergenelin/Emotion-Classification/blob/main/images/lstm-architecture.png)
 
 We used our validation set to optimize 8 sets of hyperparameters:
+
 | Epochs | Learning Rate | LSTM Layers | Dropout | F1   |
 |--------|---------------|-------------|---------|------|
 | 5      | .001          | 2           | .1      | .717 |
@@ -72,4 +75,28 @@ All models were trained for 25 epochs but the reported score is for the best-per
 
 ### BERT Transformers
 
+The model consists of a 768 layer word embedding layer, 11 encoder layers, and a pooler layer. We used both the "bert-base-uncased" model and "twitter-roberta-base-sentiment" models. We trained 5 different models compounding the follinwg additional layers for retraining:
+
+| Model   | Layers  (Re-)Trained | Validation  Macro F1 |
+|---------|----------------------|----------------------|
+| BERT    | 1                    | 0.433                |
+| BERT    | 2                    | 0.680                |
+| BERT    | 3                    | 0.778                |
+| BERT    | 4                    | 0.787                |
+| BERT    | 5                    | 0.798                |
+| RoBERTa | 1                    | 0.250                |
+| RoBERTa | 2                    | 0.342                |
+| RoBERTa | 3                    | 0.484                |
+| RoBERTa | 4                    | 0.547                |
+| RoBERTa | 5                    | 0.553                |
+
+Each model was trained for 25 epochs and validated using our held-out validation set.
+
 ## Results
+
+We retrained each of the combined trainining and validation sets. Each model was trained in the same way as its best performing precendent during tuning yieliding the following results:
+| Model    | Test Macro-Averaged F1 Score |
+|----------|------------------------------|
+| BERT     | 0.813                        |
+| LSTM-CNN | 0.707                        |
+| SVC      | 0.613                        |
